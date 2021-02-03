@@ -84,7 +84,7 @@ public class SampleController {
 		String id = request.getParameter("id");
 		AhmsdnisMstbrnd obj = com001Service.getBrand(id);
 		ModelAndView model = new ModelAndView("idcoahmsdnismstbrand/IdcoahmsdnismstbrandFormUpdate");
-		model.addObject("obj", obj);
+		model.addObject("idnya", id);
 
 		return model;
 	}

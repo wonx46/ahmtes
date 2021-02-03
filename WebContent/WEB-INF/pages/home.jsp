@@ -27,8 +27,8 @@
 			<th>Code</th>
 			<th>Name</th>
 			<th>Typ</th>
-			<!-- <th>Url</th>
-			<th>Action</th> -->
+			<th>Brand</th>
+			<th>Action</th> 
 
 			<%-- <c:forEach var="x" items="${list}">
 				<tr>
@@ -90,7 +90,7 @@
         $(function() {
         	$.each(response, function(i, item) {
         	    $('<tr>').html(
-        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td><a href=/ahmsdnis001-pst/editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
+        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=/ahmsdnistes/editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
         	});
         });
 
@@ -103,13 +103,13 @@
 		 $.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "http://localhost:9988/brand/delete/"+code,
+			url : "/ahmsdnistes/jx/com001/delete/"+code,
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
 				console.log("SUCCESS: ");
 				console.log(resp);
-				 window.location.href =  "/ahmsdnis001-pst/";
+				 window.location.href =  "/ahmsdnistes";
 			},
 			error : function(e) {
 				console.log("ERROR: ", e);

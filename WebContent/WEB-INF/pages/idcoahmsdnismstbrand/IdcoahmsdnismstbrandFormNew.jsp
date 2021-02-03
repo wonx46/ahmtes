@@ -99,13 +99,13 @@
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "http://localhost:9988/brand/save",
+			url : "/ahmsdnistes/jx/com001/save",
 			data : JSON.stringify(form),
 			dataType : 'json',
 			timeout : 100000,
 			success : function(data) {
 				console.log("SUCCESS: ", data);
-				 window.location.href =  "/ahmsdnis001-pst/";
+				 window.location.href =  "/ahmsdnistes";
 				/* display(data); */
 			},
 			error : function(e) {

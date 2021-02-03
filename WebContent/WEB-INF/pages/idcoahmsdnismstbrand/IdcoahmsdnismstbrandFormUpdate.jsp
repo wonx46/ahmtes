@@ -85,11 +85,11 @@
 	
 	function retrieveBrand(code) {
 
-
+		console.log("code: "+code);
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "http://localhost:9988/brand/findbycode?code="+code,
+			url : "/ahmsdnistes/jx/com001/findbycode?code="+code,
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
@@ -130,13 +130,13 @@
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "http://localhost:9988/brand/update",
+			url : "/ahmsdnistes/jx/com001/update",
 			data : JSON.stringify(form),
 			dataType : 'json',
 			timeout : 100000,
 			success : function(data) {
 				console.log("SUCCESS: ", data);
-				 window.location.href =  "/ahmsdnis001-pst/";
+				 window.location.href =  "/ahmsdnistes";
 				/* display(data); */
 			},
 			error : function(e) {
