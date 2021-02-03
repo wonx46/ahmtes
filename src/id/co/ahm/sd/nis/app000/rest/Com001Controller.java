@@ -1,25 +1,24 @@
 package id.co.ahm.sd.nis.app000.rest;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
+import id.co.ahm.jxf.constant.StatusMsgEnum;
+import id.co.ahm.jxf.dto.DtoResponse;
+import id.co.ahm.jxf.util.DtoHelper;
 import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd;
 import id.co.ahm.sd.nis.app000.service.Com001Service;
+import id.co.ahm.sd.nis.app000.utils.ObjectUtiliti;
 
 @RestController
 @RequestMapping("jx/com001")
@@ -49,70 +48,68 @@ public class Com001Controller {
 
 	 
 	 
-	
-	 @RequestMapping(value = "/getAllBrands", method = RequestMethod.GET)
-	public List<AhmsdnisMstbrnd> getAllBrandnya(){
+		@RequestMapping(value="/retrieve", method = RequestMethod.GET)
+		public DtoResponse getProduk(){
 			List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
-			return list;
-	}
+			 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
+		}
+		
+		@RequestMapping(value="/findbycode", method = RequestMethod.GET)
+		public DtoResponse getBrandbycode(@RequestParam(value = "code") String code){
+			List<AhmsdnisMstbrnd> list = new ArrayList<AhmsdnisMstbrnd>();
+			AhmsdnisMstbrnd brand = com001Service.getBrand(code);
+			list.add(brand);
+			 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
+		}
+		
+		@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
+		public DtoResponse delete(@PathVariable String id){
+			
+			try {
+				com001Service.deleteBrand(id);
+				 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+			}
+			
+		}
+		
+		
+		@RequestMapping(value="/save", method = RequestMethod.POST)
+		public DtoResponse save(@RequestBody AhmsdnisMstbrnd obj){
+			System.out.println(obj.getVbrndcd()+" - "+obj.getVbrndnm());
+			try {
+				com001Service.addMstBrand(obj);
+				 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+			}
+			
+		}
+		
+		@RequestMapping(value="/update", method = RequestMethod.POST)
+		public DtoResponse update(@RequestBody AhmsdnisMstbrnd obj){
+			System.out.println(obj.getVbrndcd()+" - "+obj.getVbrndnm());
+			try {
+				AhmsdnisMstbrnd exist  = com001Service.getBrand(obj.getVbrndcd());
+				if(exist != null){
+					exist = (AhmsdnisMstbrnd) ObjectUtiliti.copyObject(obj, exist);
+					com001Service.addMstBrand(exist);
+					 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+				}else{
+					 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+				}
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+			}
+			
+		}
 	 
 	
-	@RequestMapping(value = "/")
-	public ModelAndView list(ModelAndView model) throws IOException {
-		List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
-		model.addObject("list", list);
-		model.setViewName("home");
-		return model;
-	}
-
-	@RequestMapping(value = "/newBrand", method = RequestMethod.GET)
-	public ModelAndView createNew(ModelAndView model) {
-		AhmsdnisMstbrnd o = new AhmsdnisMstbrnd();
-		model.addObject("obj", o);
-		model.setViewName("idcoahmsdnismstbrand/IdcoahmsdnismstbrandFormNew");
-		return model;
-	}
-
-	@RequestMapping(value = "/updateBrand", method = RequestMethod.POST)
-	public ModelAndView update(@ModelAttribute AhmsdnisMstbrnd obj) {
-		
-			obj.setVmodi("adminupdate");
-			obj.setDmodi(getNow());
-			com001Service.updateBrand(obj);
-		
-		return new ModelAndView("redirect:/");
-	}
-
 	
-	
-	@RequestMapping(value = "/saveBrand", method = RequestMethod.POST)
-	public ModelAndView save(@ModelAttribute AhmsdnisMstbrnd obj) {
-			obj.setVcrea("admincreate");
-			obj.setDcrea(getNow());
-			com001Service.addMstBrand(obj);
-		return new ModelAndView("redirect:/");
-	}
-
-	private Date getNow() {
-		Calendar cal = Calendar.getInstance();
-		return cal.getTime();
-	}
-
-	@RequestMapping(value = "/deleteBrand", method = RequestMethod.GET)
-	public ModelAndView delete(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		com001Service.deleteBrand(id);
-		return new ModelAndView("redirect:/");
-	}
-
-	@RequestMapping(value = "/editBrand", method = RequestMethod.GET)
-	public ModelAndView edit(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		AhmsdnisMstbrnd obj = com001Service.getBrand(id);
-		ModelAndView model = new ModelAndView("idcoahmsdnismstbrand/IdcoahmsdnismstbrandFormUpdate");
-		model.addObject("obj", obj);
-
-		return model;
-	}
-
 }
