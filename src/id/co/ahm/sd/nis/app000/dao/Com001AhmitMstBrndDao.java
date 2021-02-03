@@ -7,6 +7,8 @@ import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd;
 public interface Com001AhmitMstBrndDao {
 
 	public void addMstBrand(AhmsdnisMstbrnd brand);
+	
+	public void saveAll(List<AhmsdnisMstbrnd> brand);
 
 	public List<AhmsdnisMstbrnd> getAllBrand();
 

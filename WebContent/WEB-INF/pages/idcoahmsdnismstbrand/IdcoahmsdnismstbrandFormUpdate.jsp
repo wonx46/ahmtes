@@ -89,7 +89,7 @@
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "/ahmsdnistes/jx/com001/findbycode?code="+code,
+			url : "jx/com001/findbycode?code="+code,
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
@@ -130,13 +130,13 @@
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "/ahmsdnistes/jx/com001/update",
+			url : "jx/com001/update",
 			data : JSON.stringify(form),
 			dataType : 'json',
 			timeout : 100000,
 			success : function(data) {
 				console.log("SUCCESS: ", data);
-				 window.location.href =  "/ahmsdnistes";
+				 window.location.href =  "";
 				/* display(data); */
 			},
 			error : function(e) {

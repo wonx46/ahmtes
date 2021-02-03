@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>New Brand</title>
+<title>New/Edit Brand</title>
 <spring:url value="/resources/core/css/hello.css" var="coreCss" />
 <spring:url value="/resources/core/css/bootstrap.min.css"
 	var="bootstrapCss" />
@@ -20,51 +20,49 @@
 </head>
 <body>
     <div align="center">
-        <h1>New Brand</h1>
-       <%--  <form:form action="saveBrand" method="post" modelAttribute="obj"> --%>
-       	<form class="form-horizontal" id="save-form">
+        <h1>Edit Brand</h1>
+       <%--  <form:form action="updateBrand" method="post" modelAttribute="obj"> --%>
+       <form class="form-horizontal" id="save-form">
         <table>
-            
-             <tr>
-                <td>Code:</td>
-                <td>
-                <%-- <form:input path="vbrndcd" /> --%>
-                <input type=text class="form-control" id="vbrndcd">
-                </td>
-            </tr>
+            <%-- <form:hidden path="vbrndcd"/>
+             <form:hidden path="vcrea"/>
+              <form:hidden path="dcrea"/>
+               <form:hidden path="vmodi"/>
+                <form:hidden path="dmodi"/> --%>
                 
+          <input type="hidden" class="form-control" id="vbrndcd" value="${obj.vbrndcd}" >
+            
             <tr>
                 <td>Name:</td>
                 <td>
-              <%--   <form:input path="vbrndnm" /> --%>
-               <input type=text class="form-control" id="vbrndnm">
+         <%--        <form:input path="vbrndnm" /> --%>
+                  <input type=text class="form-control" id="vbrndnm" value="${obj.vbrndnm}">
                 </td>
             </tr>
           
             <tr>
                 <td>TYP:</td>
                 <td>
-               <%--  <form:input path="vbrndtyp" /> --%>
-                <input type=text class="form-control" id="vbrndtyp">
+                <%-- <form:input path="vbrndtyp" /> --%>
+                  <input type=text class="form-control" id="vbrndtyp" value="${obj.vbrndtyp}">
                 </td>
             </tr>
             
-               <tr>
-                <td>Brand:</td>
+             <tr>
+                <td>URL:</td>
                 <td>
-        
-                <input type=text class="form-control" id="vurlbrnd">
+               <%--  <form:input path="vurlbrnd" /> --%>
+                <input type=text class="form-control" id="vurlbrnd" value="${obj.vurlbrnd}">
                 </td>
             </tr>
-        
-        
+            
             
             <tr>
-                <td colspan="2" align="center"><input type="submit" value="Save" id="btn-save" ></td>
+                <td colspan="2" align="center"><input type="submit" value="Save" id="btn-save"></td>
             </tr>
         </table>
-        <%-- </form:form> --%>
-        </form>
+       <%--  </form:form> --%>
+       </form>
     </div>
     
      <script>
@@ -99,18 +97,18 @@
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
-			url : "jx/com001/save",
+			url : "savebrandxls",
 			data : JSON.stringify(form),
 			dataType : 'json',
 			timeout : 100000,
 			success : function(data) {
 				console.log("SUCCESS: ", data);
-				 window.location.href =  "";
-				/* display(data); */
+				 window.location.href =  "previewtmpxls";
 			},
 			error : function(e) {
 				console.log("ERROR: ", e);
-				/* display(e); */
+				 window.location.href =  "previewtmpxls";
+				
 			},
 			done : function(e) {
 				console.log("DONE");

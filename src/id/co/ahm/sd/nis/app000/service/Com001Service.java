@@ -19,4 +19,8 @@ public interface Com001Service {
 	public AhmsdnisMstbrnd getBrand(String brandId);
 	
 	public DtoSample getSampleData();
+	
+	 public String getId(Object b);
+	 
+	 public void saveToDb(List<Object> list, String key);
 }

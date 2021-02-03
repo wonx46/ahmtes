@@ -22,6 +22,17 @@
 	<div align="center">
 		<h1>Master Brand</h1>
 		
+		<!-- <form method="post" id="fileinfo" name="fileinfo" enctype="multipart/form-data">
+			<a class="btn btn-success fa fa-cloud-upload" style="width: 200px">
+	           <input type="file" name="file">
+			</a>
+		   <button type="submit" class="btn btn-primary" id="uploadBTN">Preview File</button>
+							                     <a class="btn deepPink-bgcolor fa" >Exp PDF</a>
+	    </form> -->
+	    
+	    <input type="file" name="file" id="fileLoader" /> 
+		<input type="button" id="fileSubmit" value="Upload"/>
+		
 		<table border="1" id="records_table">
 
 			<th>Code</th>
@@ -55,7 +66,44 @@
 		retrieveBrand();
 	/* 	$('#myLink').click(function(){ MyFunction(); return false; }); */
 
+		var files = [];
+		
+                
+                $('#fileLoader').on('change', function(){ 
+                	 files=event.target.files;
+                });
+		
+		  $('#fileSubmit').on('click', function(){ 
+			  processUpload();
+         });
+                
+		
+		function processUpload()
+	    {
+	        var oMyForm = new FormData();
+	        oMyForm.append("file", files[0]);
+	       $.ajax({dataType : 'json',
+	              url : "/ahmsdnistes/uploadxlstmp?clazz=id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd&url=-idcoahmsdnismstbrand-preview",
+	              data : oMyForm,
+	              type : "POST",
+	              enctype: 'multipart/form-data',
+	              processData: false, 
+	              contentType:false,
+	              success : function(result) {
+	                /*  console.log("sukses"); */
+	            	  window.location.href =  "previewtmpxls";
+	              },
+	              error : function(e) {
+	            	  window.location.href =  "previewtmpxls";
+	  				/* console.log("ERROR: ", e); */
+	  				/* display(e); */
+	  			}
+	          });
+	    }
+	
 	});
+	
+	
 	
 	function retrieveBrand() {
 
@@ -63,7 +111,7 @@
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "/ahmsdnistes/jx/com001/retrieve",
+			url : "jx/com001/retrieve",
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
@@ -90,12 +138,13 @@
         $(function() {
         	$.each(response, function(i, item) {
         	    $('<tr>').html(
-        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=/ahmsdnistes/editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
+        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
         	});
         });
 
 
     }
+	
 	
 	function deleteObj(code) {
 
@@ -103,13 +152,13 @@
 		 $.ajax({
 			type : "GET",
 			contentType : "application/json",
-			url : "/ahmsdnistes/jx/com001/delete/"+code,
+			url : "jx/com001/delete/"+code,
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
 				console.log("SUCCESS: ");
 				console.log(resp);
-				 window.location.href =  "/ahmsdnistes";
+				 window.location.href =  "";
 			},
 			error : function(e) {
 				console.log("ERROR: ", e);
