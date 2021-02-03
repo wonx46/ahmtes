@@ -1,0 +1,18 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package id.co.ahm.jx.uam.app000.service;
+
+import id.co.ahm.jx.uam.app000.model.AhmitsysLogsessions;
+
+/**
+ *
+ * @author okky.ms
+ */
+public interface AhmitsysLogsessionsService {
+    public void insertLogSession(AhmitsysLogsessions ahmitsysLogsessions, String user);
+    public String generateLinkReport(String appId, String ldap, String supplierId,
+            String reportName, String destTitle, String paramToPrint, String user, String fileType) ;
+}
