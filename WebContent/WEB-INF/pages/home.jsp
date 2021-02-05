@@ -56,8 +56,21 @@
 			</c:forEach> --%>
 		</table>
 		<h4>
-			New Brand Register <a href="newBrand">here</a>
+		New Brand Register <a href="newBrand">here</a> 
 		</h4>
+		<h4>
+		
+			Download Template <a href="writexls?filetemplate=template.xlsx&outputfilename=Testing.xlsx">here</a>
+			
+		</h4>
+		<div>
+		 <input type="file" name="filepic" id="fileLoaderPic" /> 
+		<input type="button" id="fileSubmitPic" value="Upload"/>
+		
+		<h2>${msgpic}</h2>
+		
+		</div>
+		
 	</div>
 	 
 	 
@@ -66,6 +79,9 @@
 		retrieveBrand();
 	/* 	$('#myLink').click(function(){ MyFunction(); return false; }); */
 
+	
+	
+	// start upload xlx
 		var files = [];
 		
                 
@@ -101,6 +117,45 @@
 	          });
 	    }
 	
+		// end upload xls
+		
+		//start upload and validate pic
+		
+		var filespic = [];
+		
+                
+                $('#fileLoaderPic').on('change', function(){ 
+                	filespic=event.target.files;
+                });
+		
+		  $('#fileSubmitPic').on('click', function(){ 
+			  processUploadPic();
+         });
+                
+		
+		function processUploadPic()
+	    {
+	        var oMyFormpic = new FormData();
+	        oMyFormpic.append("file", filespic[0]);
+	       $.ajax({dataType : 'json',
+	              url : "/ahmsdnistes/uploadpic",
+	              data : oMyFormpic,
+	              type : "POST",
+	              enctype: 'multipart/form-data',
+	              processData: false, 
+	              contentType:false,
+	              success : function(result) {
+	              console.log("sukses"); 
+	            	 window.location.href =  ""; 
+	              },
+	              error : function(e) {
+	            	  window.location.href =  ""; 
+	  			 console.log("ERROR: ", e); 
+	  				/* display(e); */
+	  			}
+	          });
+	    }
+		//end pic
 	});
 	
 	

@@ -1,5 +1,6 @@
 package id.co.ahm.sd.nis.app000.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -19,7 +20,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+ 
+import javax.imageio.ImageIO;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
@@ -55,6 +64,7 @@ import id.co.ahm.sd.nis.app000.service.Com001Service;
 import id.co.ahm.sd.nis.app000.utils.ClassUtils;
 //import id.co.ahm.sd.nis.app000.utils.GlobalVariable;
 import id.co.ahm.sd.nis.app000.utils.MapXls;
+import id.co.ahm.sd.nis.app000.utils.XlsUtils;
 
 
 
@@ -62,10 +72,123 @@ import id.co.ahm.sd.nis.app000.utils.MapXls;
 //@RequestMapping("/brand")
 public class SampleController {
 
-	private final String UPLOAD_DIR = "/Users/iwan/Documents/BOZREZA/gank/ahmsdnistes/upload/";
+	private final String UPLOAD_DIR = "/upload/";
+	private static String TEMPLATE_DIR = "/Users/iwan/Documents/BOZREZA/tmp/template/";
+	private static String DOWNLOAD_DIR = "/download/";
 	
 	@Autowired
 	Com001Service com001Service;
+	
+	@PostMapping("/uploadpic")
+	@ResponseBody
+    public ModelAndView uploadPic(ModelAndView model, HttpServletRequest request, @RequestParam("file") MultipartFile file,
+    		RedirectAttributes attributes,HttpSession session) throws Exception {
+
+        if (file.isEmpty()) {
+        	 session.setAttribute("msgpic", "Please select a file to upload.");
+            return list(model, session);
+        }
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+        	 String dataDirectory = request.getServletContext().getRealPath(UPLOAD_DIR);
+            Path path = Paths.get(dataDirectory, fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            
+            String fileNameNoExt = fileName.substring(0,fileName
+	                .lastIndexOf(".") );
+            String formatName = fileName.substring(fileName
+	                .lastIndexOf(".") + 1);
+            
+            resize(dataDirectory+"/"+fileName, dataDirectory+"/"+fileNameNoExt+"_300x300."+formatName, 300, 300);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // return success response
+        session.setAttribute("msgpic", "You successfully uploaded " + fileName + "! size 300x300");
+        return list(model, session);
+    }
+	
+	 public static void resize(String inputImagePath, String outputImagePath, int scaledWidth, int scaledHeight)
+	            throws IOException {
+	        // reads input image
+	        File inputFile = new File(inputImagePath);
+	        BufferedImage inputImage = ImageIO.read(inputFile);
+	 
+	        // creates output image
+	        BufferedImage outputImage = new BufferedImage(scaledWidth,
+	                scaledHeight, inputImage.getType());
+	 
+	        // scales the input image to the output image
+	        Graphics2D g2d = outputImage.createGraphics();
+	        g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+	        g2d.dispose();
+	 
+	        // extracts extension of output file
+	        String formatName = outputImagePath.substring(outputImagePath
+	                .lastIndexOf(".") + 1);
+	 
+	        // writes to output file
+	        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+	    }
+
+	@RequestMapping(value = "/writexls")
+	public void writeXls(ModelAndView model, HttpServletRequest request, 
+			HttpServletResponse response) throws IOException {
+		String fileName = request.getParameter("filetemplate");
+		 Path path = Paths.get(TEMPLATE_DIR + fileName);
+         
+         FileInputStream filexls = new FileInputStream(path.toFile());
+		
+		List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
+		try {
+			String outputFileName = "Testing.xlsx"; 
+			 String dataDirectory = request.getServletContext().getRealPath(DOWNLOAD_DIR);
+			 System.out.println("download: "+dataDirectory);
+			XlsUtils.write(getListObj(list), new XSSFWorkbook(filexls), "Tes Sheet", 2,dataDirectory,outputFileName);
+			downloadFile(request, response);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@RequestMapping(value = "/downloadxls")
+	private void downloadFile(HttpServletRequest request, 
+			HttpServletResponse response) throws Exception{
+		
+		String outputFileName = request.getParameter("outputfilename");
+	
+	 String dataDirectory = request.getServletContext().getRealPath(DOWNLOAD_DIR);
+	 Path pathFile = Paths.get(dataDirectory, outputFileName);
+
+        try {
+      
+          response.setContentType("application/*");
+          response.addHeader("Content-Disposition", "attachment; filename="+outputFileName);
+        	
+        	  FileInputStream is = new FileInputStream(pathFile.toFile());
+            org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+          } catch (IOException ex) {
+        	  ex.printStackTrace();
+//            log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
+            throw new RuntimeException("IOError writing file to output stream");
+          }
+        
+//        return list(model);
+	}
+
+	private List<Object> getListObj(List<AhmsdnisMstbrnd> list) {
+		List<Object> res = new ArrayList<>();
+		res.addAll(list);
+		
+		return res;
+	}
 
 	@RequestMapping(value = "/getDataSample", method = RequestMethod.GET)
 	public String getAllEmployees(Model model) {
@@ -74,9 +197,10 @@ public class SampleController {
 	}
 	
 	@RequestMapping(value = "/")
-	public ModelAndView list(ModelAndView model) throws IOException {
+	public ModelAndView list(ModelAndView model,HttpSession session) throws IOException {
 		List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
 		model.addObject("list", list);
+		model.addObject("msgpic", session.getAttribute("msgpic") == null ? "":session.getAttribute("msgpic") );
 		model.setViewName("home");
 		return model;
 	}
@@ -134,11 +258,8 @@ public class SampleController {
 	 @RequestMapping(value = "/previewtmpxls", method = RequestMethod.GET)
 	    public ModelAndView doPreviewXls(Model model, HttpSession session) {
 	    	try {
-//	    		String code =  (String) session.getAttribute("idloginsession");
-//	    		List<Object> list =  (List<Object>) GlobalVariable.getInstance().get("listtmpxls"+code);
+
 	    		List<Object> list = (List<Object>)  session.getAttribute("listtmpxls");
-	    		
-//	    	    String url = (String) GlobalVariable.getInstance().get("urlpreview"+code);
 	    		String url = (String) session.getAttribute("urlpreview");
 	    	    
 	    	    ModelAndView modelview = new ModelAndView(url);
@@ -166,7 +287,6 @@ public class SampleController {
         if (file.isEmpty()) {
         	System.err.println("Please select a file to upload.");
             attributes.addFlashAttribute("message", "Please select a file to upload.");
-//            return new ModelAndView("redirect:/");
             return "/";
         }
 
@@ -204,10 +324,7 @@ public class SampleController {
                         		cell.setCellStyle(cellStyle);
                         		String datex = cell.getDateCellValue() + "";
                         		Date dt = cell.getDateCellValue();
-                        		
-//                        		System.out.println(datex);
-//                        		System.out.println(formater.format(dt));
-                        		 data.get(i).add(dt);
+                        		data.get(i).add(dt);
                         		
                         		
                         	  
@@ -267,10 +384,10 @@ public class SampleController {
 	    		i++;
 			}
 //	    	System.out.println("idloginsession: "+idloginsession);
-	    	for (Object dt : list) {
-				AhmsdnisMstbrnd x = (AhmsdnisMstbrnd)dt;
-				System.out.println(x.getVbrndcd()+" "+x.getVbrndnm());
-			}
+//	    	for (Object dt : list) {
+//				AhmsdnisMstbrnd x = (AhmsdnisMstbrnd)dt;
+//				System.out.println(x.getVbrndcd()+" "+x.getVbrndnm());
+//			}
 	    	
 //	    	GlobalVariable.getInstance().put("listtmpxls"+idloginsession, list);
 	    	 session.setAttribute("listtmpxls", list);
