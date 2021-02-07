@@ -147,6 +147,7 @@ public class SampleController {
 		try {
 			String outputFileName = "Testing.xlsx"; 
 			 String dataDirectory = request.getServletContext().getRealPath(DOWNLOAD_DIR);
+			 new File(dataDirectory).mkdir();
 			 System.out.println("download: "+dataDirectory);
 			XlsUtils.write(getListObj(list), new XSSFWorkbook(filexls), "Tes Sheet", 2,dataDirectory,outputFileName);
 			downloadFile(request, response);
@@ -176,11 +177,9 @@ public class SampleController {
             response.flushBuffer();
           } catch (IOException ex) {
         	  ex.printStackTrace();
-//            log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
             throw new RuntimeException("IOError writing file to output stream");
           }
         
-//        return list(model);
 	}
 
 	private List<Object> getListObj(List<AhmsdnisMstbrnd> list) {

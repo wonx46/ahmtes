@@ -59,9 +59,7 @@
 		New Brand Register <a href="newBrand">here</a> 
 		</h4>
 		<h4>
-		
 			Download Template <a href="writexls?filetemplate=template.xlsx&outputfilename=Testing.xlsx">here</a>
-			
 		</h4>
 		<div>
 		 <input type="file" name="filepic" id="fileLoaderPic" /> 
