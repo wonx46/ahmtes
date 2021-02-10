@@ -69,7 +69,6 @@ import id.co.ahm.sd.nis.app000.utils.XlsUtils;
 
 
 @Controller
-//@RequestMapping("/brand")
 public class SampleController {
 
 	private final String UPLOAD_DIR = "/upload/";

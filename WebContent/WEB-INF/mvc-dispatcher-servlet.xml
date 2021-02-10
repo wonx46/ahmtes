@@ -17,7 +17,7 @@
         <property name="jndiName" value="jdbc/ahmpsDS"/>
     </bean>  -->
         
-        <bean id="ahmjxsysLogservicesDao"
+     <bean id="ahmjxsysLogservicesDao"
 		class="id.co.ahm.jx.sys.app000.dao.impl.AhmjxsysLogservicesDaoImpl">
 	</bean>
 	<bean id="tokenPstUtil"
@@ -65,6 +65,8 @@
     <mvc:interceptors>
         <bean class="id.co.ahm.jx.interceptor.Interceptor"/>
     </mvc:interceptors>
+    
+    <mvc:resources mapping="/resources/**" location="/resources/" />
     
     <bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

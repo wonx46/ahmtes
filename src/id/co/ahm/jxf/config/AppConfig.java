@@ -19,7 +19,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
  */
 @Configuration
 //@PropertySource("file:///D:/jdbc.properties")
-//@PropertySource({"classpath:database_mysql.properties", "file:${jxconfig}"})
+//@PropertySource({"classpath:database.properties", "file:${jxconfig}"})
 @PropertySource({"classpath:database_mysql.properties"})
 public class AppConfig {
     
