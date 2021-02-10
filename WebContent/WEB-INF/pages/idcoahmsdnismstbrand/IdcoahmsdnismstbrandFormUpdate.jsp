@@ -30,7 +30,8 @@
                <form:hidden path="vmodi"/>
                 <form:hidden path="dmodi"/> --%>
                 
-          <input type="hidden" class="form-control" id="vbrndcd" value="${idnya}" >
+          <input type="hidden" class="form-control" id="vbrndcd" value="${vbrndcd}" >
+          <input type="hidden" class="form-control" id="vbrndpk" value="${vbrndpk}" >
             
             <tr>
                 <td>Name:</td>
@@ -67,7 +68,7 @@
     
      <script>
 	jQuery(document).ready(function($) {
-		retrieveBrand($("#vbrndcd").val()); 
+		retrieveBrand(); 
 
 		 $("#save-form").submit(function(event) {
 
@@ -85,11 +86,16 @@
 	
 	function retrieveBrand(code) {
 
-		console.log("code: "+code);
+		var form = {}
+		form["vbrndcd"] = $("#vbrndcd").val();
+		form["vbrndpk"] = $("#vbrndpk").val();
+		
+		
 		$.ajax({
-			type : "GET",
+			type : "POST",
 			contentType : "application/json",
-			url : "jx/com001/findbycode?code="+code,
+			url : "jx/com001/findbycode",
+			data : JSON.stringify(form),
 			dataType : 'json',
 			timeout : 100000,
 			success : function(resp) {
@@ -111,7 +117,8 @@
 	
 	function fillForm(data) {
 		console.log("fill data "+data);
-		$("#vbrndcd").val(data.vbrndcd);
+		$("#vbrndcd").val(data.id.vbrndcd);
+		$("#vbrndpk").val(data.id.vbrndpk);
 		$("#vbrndnm").val(data.vbrndnm);
 		$("#vbrndtyp").val(data.vbrndtyp);
 		$("#vurlbrnd").val(data.vurlbrnd);
@@ -120,18 +127,26 @@
 	
 	function saveForm() {
 
+		var formid = {}
+		formid["vbrndcd"] = $("#vbrndcd").val();
+		formid["vbrndpk"] = $("#vbrndpk").val();
+		console.log(formid);
+		
 		var form = {}
-		form["vbrndcd"] = $("#vbrndcd").val();
+		form["id"] = formid;
 		form["vbrndnm"] = $("#vbrndnm").val();
 		form["vbrndtyp"] = $("#vbrndtyp").val();
 		form["vurlbrnd"] = $("#vurlbrnd").val();
-		
+		console.log(form);
+	
+		var datajson = JSON.stringify(form);
+		console.log(datajson);
 
 		$.ajax({
 			type : "POST",
 			contentType : "application/json",
 			url : "jx/com001/update",
-			data : JSON.stringify(form),
+			data : datajson,
 			dataType : 'json',
 			timeout : 100000,
 			success : function(data) {

@@ -237,19 +237,21 @@ public class SampleController {
 		return cal.getTime();
 	}
 
-	@RequestMapping(value = "/deleteBrand", method = RequestMethod.GET)
-	public ModelAndView delete(HttpServletRequest request) {
-		String id = request.getParameter("id");
-		com001Service.deleteBrand(id);
-		return new ModelAndView("redirect:/");
-	}
+//	@RequestMapping(value = "/deleteBrand", method = RequestMethod.GET)
+//	public ModelAndView delete(HttpServletRequest request) {
+//		String id = request.getParameter("id");
+//		com001Service.deleteBrand(id);
+//		return new ModelAndView("redirect:/");
+//	}
 
 	@RequestMapping(value = "/editBrand", method = RequestMethod.GET)
 	public ModelAndView edit(HttpServletRequest request) {
-		String id = request.getParameter("id");
+		String vbrndcd = request.getParameter("vbrndcd");
+		String vbrndpk = request.getParameter("vbrndpk");
 		
 		ModelAndView model = new ModelAndView("idcoahmsdnismstbrand/IdcoahmsdnismstbrandFormUpdate");
-		model.addObject("idnya", id);
+		model.addObject("vbrndcd", vbrndcd);
+		model.addObject("vbrndpk", vbrndpk);
 
 		return model;
 	}
@@ -278,7 +280,7 @@ public class SampleController {
 	@ResponseBody
     public String uploadFileTmp(@RequestParam("file") MultipartFile file,@RequestParam("clazz")String clazz,
     		@RequestParam("url")String url,
-    		RedirectAttributes attributes, HttpSession session) {
+    		RedirectAttributes attributes, HttpSession session, HttpServletRequest request) {
 
 		System.out.println("masuk uploadFileTmp "+clazz+" "+url);
 		
@@ -294,8 +296,13 @@ public class SampleController {
         System.out.println("fileName: "+fileName);
         // save the file on the local file system
         try {
+        	
+        	 String dataDirectoryUpload = request.getServletContext().getRealPath(UPLOAD_DIR);
+        	 System.out.println("realpath: "+dataDirectoryUpload);
+			 new File(dataDirectoryUpload).mkdir();
+        	
         	SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
-            Path path = Paths.get(UPLOAD_DIR + fileName);
+            Path path = Paths.get(dataDirectoryUpload + fileName);
             System.out.println("path: "+path);
             Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             
@@ -406,8 +413,27 @@ public class SampleController {
 					  for (Annotation ann : annotations) {
 						if( ann instanceof MapXls){
 							MapXls mapxls = (MapXls) ann;
-							Object object1	= ClassUtils.convertDataType(xls.get(mapxls.indexXls()), field.getType(),false, "yyyy-MM-dd");
-						    PropertyUtils.setProperty(obTmp, field.getName(), object1);
+							if(mapxls.indexXls() == 999){ // artinya ada embedid
+								if(mapxls.embedId().length()>0 && mapxls.embedId().contains("#")){
+									String[] split = mapxls.embedId().split("#");
+									for (String pk : split) {
+										String[] fieldsplit = pk.split("-");
+										String fieldIdName = fieldsplit[0];
+										Integer indexXlsId = Integer.parseInt(fieldsplit[1]);
+										String fieldIdnya = field.getName()+"."+fieldIdName;
+										
+										Class propertyType = PropertyUtils.getPropertyType(obTmp,fieldIdnya );
+										
+										Object object1	= ClassUtils.convertDataType(xls.get(indexXlsId), propertyType,false, "yyyy-MM-dd");
+									    PropertyUtils.setProperty(obTmp, fieldIdnya, object1);
+									}
+								}
+								
+							}else{
+								Object object1	= ClassUtils.convertDataType(xls.get(mapxls.indexXls()), field.getType(),false, "yyyy-MM-dd");
+							    PropertyUtils.setProperty(obTmp, field.getName(), object1);	
+							}
+							
 						}
 					}
 					 
@@ -464,6 +490,9 @@ public class SampleController {
 	    		
 	    		urlpageedit  = urlpageedit.replaceAll("-", "/");
 	    		
+	    		if(id.contains("-")){
+	    			id = id.replaceAll("-", "#");
+	    		}
 	    		 Object obTmp	=  session.getAttribute("objxls"+clazzname+id);	
 					
 	    		
@@ -501,7 +530,7 @@ public class SampleController {
 	    		for (Object b : list) {
 	    			String idnya = com001Service.getId(b);
 	    			
-					if(idnya.equalsIgnoreCase(obj.getVbrndcd())){
+					if(idnya.equalsIgnoreCase(obj.getId().getVbrndcd()+"#"+obj.getId().getVbrndpk())){
 						list2.add(obj);
 					}else{
 						list2.add(b);
@@ -511,7 +540,7 @@ public class SampleController {
 	    		session.setAttribute("listtmpxls", list2);
 	    	
 	    	
-	    		session.setAttribute("objxls"+obj.getClass().getSimpleName()+obj.getVbrndcd(), obj);
+	    		session.setAttribute("objxls"+obj.getClass().getSimpleName()+obj.getId().getVbrndcd()+"#"+obj.getId().getVbrndpk(), obj);
 	    
 
 	    	return doPreviewXls(model, session);

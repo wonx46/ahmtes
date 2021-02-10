@@ -3,6 +3,7 @@ package id.co.ahm.sd.nis.app000.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
@@ -26,9 +27,9 @@ public class AhmsdnisMstbrnd implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@MapXls(indexXls = 0)
-	private String vbrndcd;
+	@EmbeddedId
+	@MapXls(embedId = "vbrndcd-0#vbrndpk-10")
+	private AhmsdnisMstbrndId id;
 
 	@MapXls(indexXls = 1)
 	private String vbrndnm;
@@ -67,15 +68,30 @@ public class AhmsdnisMstbrnd implements Serializable {
 
 	
 	public AhmsdnisMstbrnd() {
+		id = new AhmsdnisMstbrndId();
+	}
+	
+	
+
+//	public String getVbrndcd() {
+//		return this.vbrndcd;
+//	}
+//
+//	public void setVbrndcd(String vbrndcd) {
+//		this.vbrndcd = vbrndcd;
+//	}
+
+	public AhmsdnisMstbrndId getId() {
+		return id;
 	}
 
-	public String getVbrndcd() {
-		return this.vbrndcd;
+
+
+	public void setId(AhmsdnisMstbrndId id) {
+		this.id = id;
 	}
 
-	public void setVbrndcd(String vbrndcd) {
-		this.vbrndcd = vbrndcd;
-	}
+
 
 	public Date getDbgneff() {
 		return this.dbgneff;

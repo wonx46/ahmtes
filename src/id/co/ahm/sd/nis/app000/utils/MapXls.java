@@ -9,7 +9,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MapXls {
 
-	public int indexXls();
+	public int indexXls() default 999;
+	
+	public String embedId() default "";
 	
 //	public String returnClassObj() default "";
 	

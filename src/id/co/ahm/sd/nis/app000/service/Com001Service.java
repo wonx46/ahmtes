@@ -3,6 +3,7 @@ package id.co.ahm.sd.nis.app000.service;
 import java.util.List;
 
 import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd;
+import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrndId;
 import id.co.ahm.sd.nis.app000.model.DtoSample;
 
 public interface Com001Service {
@@ -12,11 +13,11 @@ public interface Com001Service {
 
 	public List<AhmsdnisMstbrnd> getAllBrand();
 
-	public void deleteBrand(String brandId);
+	public void deleteBrand(AhmsdnisMstbrndId brandId);
 
 	public AhmsdnisMstbrnd updateBrand(AhmsdnisMstbrnd brand);
 
-	public AhmsdnisMstbrnd getBrand(String brandId);
+	public AhmsdnisMstbrnd getBrand(AhmsdnisMstbrndId brandId);
 	
 	public DtoSample getSampleData();
 	

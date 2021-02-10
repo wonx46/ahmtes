@@ -34,11 +34,11 @@
 		<c:forEach var="x" items="${objs}">
 				<tr>
 
-					<td>${x.vbrndcd}</td>
+					<td>${x.id.vbrndcd} # ${x.id.vbrndpk}</td>
 					<td>${x.vbrndnm}</td>
 					<td>${x.vbrndtyp}</td>
 					<td>${x.vurlbrnd}</td>
-				<td><a href="xlseditnew?id=${x.vbrndcd}&clazzname=AhmsdnisMstbrnd&urlpageedit=idcoahmsdnismstbrand-IdcoahmsdnismstbrandFormUpdateXls">Edit</a></td> 
+				<td><a href="xlseditnew?id=${x.id.vbrndcd}-${x.id.vbrndpk}&clazzname=AhmsdnisMstbrnd&urlpageedit=idcoahmsdnismstbrand-IdcoahmsdnismstbrandFormUpdateXls">Edit</a></td> 
 
 				</tr>
 			</c:forEach> 

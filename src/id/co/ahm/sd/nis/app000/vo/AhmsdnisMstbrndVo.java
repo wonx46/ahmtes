@@ -2,7 +2,6 @@ package id.co.ahm.sd.nis.app000.vo;
 
 import java.util.Date;
 
-import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -14,7 +13,7 @@ public class AhmsdnisMstbrndVo {
 
 	@MapXls(indexXls = 0)
 	private String vbrndcd;
-
+	
 	@MapXls(indexXls = 1)
 	private String vbrndnm;
 
@@ -49,6 +48,19 @@ public class AhmsdnisMstbrndVo {
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	@MapXls(indexXls = 9)
 	private Date dmodi;
+	
+	@MapXls(indexXls = 10)
+	private String vbrndpk;
+	
+	
+
+	public String getVbrndpk() {
+		return vbrndpk;
+	}
+
+	public void setVbrndpk(String vbrndpk) {
+		this.vbrndpk = vbrndpk;
+	}
 
 	public String getVbrndcd() {
 		return vbrndcd;

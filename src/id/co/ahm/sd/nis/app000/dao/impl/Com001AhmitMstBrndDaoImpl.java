@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import id.co.ahm.jxf.dao.DefaultHibernateDao;
 import id.co.ahm.sd.nis.app000.dao.Com001AhmitMstBrndDao;
 import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd;
+import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrndId;
 
 @Repository("com001AhmitMstBrndDao")
 public class Com001AhmitMstBrndDaoImpl extends DefaultHibernateDao<Object, Serializable> implements Com001AhmitMstBrndDao {
@@ -35,7 +36,7 @@ public class Com001AhmitMstBrndDaoImpl extends DefaultHibernateDao<Object, Seria
 	}
 
 	@Override
-	public void deleteBrand(String brandId) {
+	public void deleteBrand(AhmsdnisMstbrndId brandId) {
 		AhmsdnisMstbrnd ox = (AhmsdnisMstbrnd) sessionFactory.getCurrentSession().load(
 				AhmsdnisMstbrnd.class, brandId);
 		if (null != ox) {
@@ -51,7 +52,7 @@ public class Com001AhmitMstBrndDaoImpl extends DefaultHibernateDao<Object, Seria
 	}
 
 	@Override
-	public AhmsdnisMstbrnd getBrand(String brandId) {
+	public AhmsdnisMstbrnd getBrand(AhmsdnisMstbrndId brandId) {
 		return (AhmsdnisMstbrnd) sessionFactory.getCurrentSession().get(
 				AhmsdnisMstbrnd.class, brandId);
 	}

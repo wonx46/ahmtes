@@ -30,7 +30,8 @@
                <form:hidden path="vmodi"/>
                 <form:hidden path="dmodi"/> --%>
                 
-          <input type="hidden" class="form-control" id="vbrndcd" value="${obj.vbrndcd}" >
+          <input type="hidden" class="form-control" id="vbrndcd" value="${obj.id.vbrndcd}" >
+           <input type="hidden" class="form-control" id="vbrndpk" value="${obj.id.vbrndpk}" >
             
             <tr>
                 <td>Name:</td>
@@ -86,9 +87,13 @@
 
 	
 	function saveForm() {
+		
+		var formid = {}
+		formid["vbrndcd"] = $("#vbrndcd").val();
+		formid["vbrndpk"] = $("#vbrndpk").val();
 
 		var form = {}
-		form["vbrndcd"] = $("#vbrndcd").val();
+		form["id"] = formid;
 		form["vbrndnm"] = $("#vbrndnm").val();
 		form["vbrndtyp"] = $("#vbrndtyp").val();
 		form["vurlbrnd"] = $("#vurlbrnd").val();

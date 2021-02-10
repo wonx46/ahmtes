@@ -191,7 +191,7 @@
         $(function() {
         	$.each(response, function(i, item) {
         	    $('<tr>').html(
-        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
+        	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=editBrand?vbrndcd="+response[i].id.vbrndcd+"&vbrndpk="+response[i].id.vbrndpk+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].id.vbrndcd+"','"+response[i].id.vbrndpk+"');return false; \">Delete</a></td>").appendTo('#records_table');
         	});
         });
 
@@ -199,7 +199,7 @@
     }
 	
 	
-	function deleteObj(code) {
+	/* function deleteObj(code) {
 
 		console.log("deleteObj: "+code);
 		 $.ajax({
@@ -207,6 +207,40 @@
 			contentType : "application/json",
 			url : "jx/com001/delete/"+code,
 			dataType : 'json',
+			timeout : 100000,
+			success : function(resp) {
+				console.log("SUCCESS: ");
+				console.log(resp);
+				 window.location.href =  "";
+			},
+			error : function(e) {
+				console.log("ERROR: ", e);
+				
+			},
+			done : function(e) {
+				console.log("DONE");
+				
+			}
+		}); 
+
+	} */
+	
+	function deleteObj(vbrndcd, vbrndpk) {
+
+		var formid = {}
+		formid["vbrndcd"] = vbrndcd;
+		formid["vbrndpk"] = vbrndpk;
+		console.log(formid);
+	
+		var datajson = JSON.stringify(formid);
+		console.log(datajson);
+		
+		 $.ajax({
+			type : "POST",
+			contentType : "application/json",
+			url : "jx/com001/delete",
+			dataType : 'json',
+			data: datajson,
 			timeout : 100000,
 			success : function(resp) {
 				console.log("SUCCESS: ");

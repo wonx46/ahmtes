@@ -3,6 +3,7 @@ package id.co.ahm.sd.nis.app000.dao;
 import java.util.List;
 
 import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrnd;
+import id.co.ahm.sd.nis.app000.model.AhmsdnisMstbrndId;
 
 public interface Com001AhmitMstBrndDao {
 
@@ -12,9 +13,9 @@ public interface Com001AhmitMstBrndDao {
 
 	public List<AhmsdnisMstbrnd> getAllBrand();
 
-	public void deleteBrand(String brandId);
+	public void deleteBrand(AhmsdnisMstbrndId brandId);
 
 	public AhmsdnisMstbrnd updateBrand(AhmsdnisMstbrnd brand);
 
-	public AhmsdnisMstbrnd getBrand(String brandId);
+	public AhmsdnisMstbrnd getBrand(AhmsdnisMstbrndId brandId);
 }
