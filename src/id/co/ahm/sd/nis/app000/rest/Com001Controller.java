@@ -1,4 +1,3 @@
-
 package id.co.ahm.sd.nis.app000.rest;
 
 import java.util.ArrayList;
@@ -25,92 +24,86 @@ import id.co.ahm.sd.nis.app000.utils.ObjectUtiliti;
 @RequestMapping("jx/com001")
 public class Com001Controller {
 
-	private static final Logger logger = Logger
-			.getLogger(Com001Controller.class);
+    private static final Logger logger = Logger
+            .getLogger(Com001Controller.class);
 
-	public Com001Controller() {
-		System.out.println("Com001Controller()");
-	}
+    public Com001Controller() {
+        System.out.println("Com001Controller()");
+    }
 
-	@Autowired
-	@Qualifier(value = "com001Service")
-	private Com001Service com001Service;
-	
-	 @RequestMapping(value = "/getSampleData", method = RequestMethod.GET)
-		public List<AhmsdnisMstbrnd> getSampleData(){
-				List<AhmsdnisMstbrnd> list = new ArrayList<>();
-				AhmsdnisMstbrnd o = new AhmsdnisMstbrnd();
-				o.setVbrndcd("A9373");
-				o.setVbrndnm("Joini");
-				o.setVbrndtyp("Playbos");
-				list.add(o);
-				return list;
-		}
+    @Autowired
+    @Qualifier(value = "com001Service")
+    private Com001Service com001Service;
 
-	 
-	 
-		@RequestMapping(value="/retrieve", method = RequestMethod.GET)
-		public DtoResponse getProduk(){
-			List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
-			 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
-		}
-		
-		@RequestMapping(value="/findbycode", method = RequestMethod.GET)
-		public DtoResponse getBrandbycode(@RequestParam(value = "code") String code){
-			List<AhmsdnisMstbrnd> list = new ArrayList<AhmsdnisMstbrnd>();
-			AhmsdnisMstbrnd brand = com001Service.getBrand(code);
-			list.add(brand);
-			 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
-		}
-		
-		@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
-		public DtoResponse delete(@PathVariable String id){
-			
-			try {
-				com001Service.deleteBrand(id);
-				 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
-			}
-			
-		}
-		
-		
-		@RequestMapping(value="/save", method = RequestMethod.POST)
-		public DtoResponse save(@RequestBody AhmsdnisMstbrnd obj){
-			System.out.println(obj.getVbrndcd()+" - "+obj.getVbrndnm());
-			try {
-				com001Service.addMstBrand(obj);
-				 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
-			}
-			
-		}
-		
-		@RequestMapping(value="/update", method = RequestMethod.POST)
-		public DtoResponse update(@RequestBody AhmsdnisMstbrnd obj){
-			System.out.println(obj.getVbrndcd()+" - "+obj.getVbrndnm());
-			try {
-				AhmsdnisMstbrnd exist  = com001Service.getBrand(obj.getVbrndcd());
-				if(exist != null){
-					exist = (AhmsdnisMstbrnd) ObjectUtiliti.copyObject(obj, exist);
-					com001Service.addMstBrand(exist);
-					 return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
-				}else{
-					 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
-				}
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				 return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
-			}
-			
-		}
-	 
-	
-	
+    @RequestMapping(value = "/getSampleData", method = RequestMethod.GET)
+    public List<AhmsdnisMstbrnd> getSampleData() {
+        List<AhmsdnisMstbrnd> list = new ArrayList<>();
+        AhmsdnisMstbrnd o = new AhmsdnisMstbrnd();
+        o.setVbrndcd("A9373");
+        o.setVbrndnm("Joini");
+        o.setVbrndtyp("Playbos");
+        list.add(o);
+        return list;
+    }
+
+    @RequestMapping(value = "/retrieve", method = RequestMethod.GET)
+    public DtoResponse getProduk() {
+        List<AhmsdnisMstbrnd> list = com001Service.getAllBrand();
+        return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
+    }
+
+    @RequestMapping(value = "/findbycode", method = RequestMethod.GET)
+    public DtoResponse getBrandbycode(@RequestParam(value = "code") String code) {
+        List<AhmsdnisMstbrnd> list = new ArrayList<AhmsdnisMstbrnd>();
+        AhmsdnisMstbrnd brand = com001Service.getBrand(code);
+        list.add(brand);
+        return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, list);
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public DtoResponse delete(@PathVariable String id) {
+
+        try {
+            com001Service.deleteBrand(id);
+            return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+        }
+
+    }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public DtoResponse save(@RequestBody AhmsdnisMstbrnd obj) {
+        System.out.println(obj.getVbrndcd() + " - " + obj.getVbrndnm());
+        try {
+            com001Service.addMstBrand(obj);
+            return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+        }
+
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public DtoResponse update(@RequestBody AhmsdnisMstbrnd obj) {
+        System.out.println(obj.getVbrndcd() + " - " + obj.getVbrndnm());
+        try {
+            AhmsdnisMstbrnd exist = com001Service.getBrand(obj.getVbrndcd());
+            if (exist != null) {
+                exist = (AhmsdnisMstbrnd) ObjectUtiliti.copyObject(obj, exist);
+                com001Service.addMstBrand(exist);
+                return DtoHelper.constructResponse(StatusMsgEnum.SUKSES, null, null);
+            } else {
+                return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DtoHelper.constructResponse(StatusMsgEnum.GAGAL, null, null);
+        }
+
+    }
+
 }

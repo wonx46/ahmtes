@@ -43,7 +43,6 @@
 
 			<%-- <c:forEach var="x" items="${list}">
 				<tr>
-
 					<td>${x.vbrndcd}</td>
 					<td>${x.vbrndnm}</td>
 					<td>${x.vbrndtyp}</td>
@@ -51,7 +50,6 @@
 					<td><a href="editBrand?id=${x.vbrndcd}">Edit</a>
 						&nbsp;&nbsp;&nbsp;&nbsp; <a
 						href="deleteBrand?id=${x.vbrndcd}">Delete</a></td>
-
 				</tr>
 			</c:forEach> --%>
 		</table>
@@ -59,7 +57,9 @@
 		New Brand Register <a href="newBrand">here</a> 
 		</h4>
 		<h4>
+		
 			Download Template <a href="writexls?filetemplate=template.xlsx&outputfilename=Testing.xlsx">here</a>
+			
 		</h4>
 		<div>
 		 <input type="file" name="filepic" id="fileLoaderPic" /> 
@@ -76,7 +76,6 @@
 	jQuery(document).ready(function($) {
 		retrieveBrand();
 	/* 	$('#myLink').click(function(){ MyFunction(); return false; }); */
-
 	
 	
 	// start upload xlx
@@ -159,8 +158,6 @@
 	
 	
 	function retrieveBrand() {
-
-
 		$.ajax({
 			type : "GET",
 			contentType : "application/json",
@@ -181,9 +178,7 @@
 				/* enableSearchButton(true); */
 			}
 		});
-
 	}
-
 	function fillTable(resp)
     {
 		response =  resp.data; 
@@ -194,13 +189,10 @@
         	        "<td>" + response[i].vbrndcd + "</td><td>" + response[i].vbrndnm + "</td><td>" + response[i].vbrndtyp + "</td><td> <img src="+response[i].vurlbrnd+">  </td>   <td><a href=editBrand?id="+response[i].vbrndcd+">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp; <a id = btndel value="+response[i].vbrndcd+" href=# onclick=deleteObj('"+response[i].vbrndcd+"');return false; \">Delete</a></td>").appendTo('#records_table');
         	});
         });
-
-
     }
 	
 	
 	function deleteObj(code) {
-
 		console.log("deleteObj: "+code);
 		 $.ajax({
 			type : "GET",
@@ -222,7 +214,6 @@
 				
 			}
 		}); 
-
 	}
 	
 </script>

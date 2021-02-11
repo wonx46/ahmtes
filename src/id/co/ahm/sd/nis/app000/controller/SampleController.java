@@ -69,11 +69,12 @@ import id.co.ahm.sd.nis.app000.utils.XlsUtils;
 
 
 @Controller
+//@RequestMapping("/brand")
 public class SampleController {
 
-	private final String UPLOAD_DIR = "/upload/";
-	private static String TEMPLATE_DIR = "/Users/iwan/Documents/BOZREZA/tmp/template/";
-	private static String DOWNLOAD_DIR = "/download/";
+	private final String UPLOAD_DIR = "D:/upload/";
+	private static String TEMPLATE_DIR = "D:/upload/template/";
+	private static String DOWNLOAD_DIR = "/download";
 	
 	@Autowired
 	Com001Service com001Service;
@@ -146,7 +147,7 @@ public class SampleController {
 		try {
 			String outputFileName = "Testing.xlsx"; 
 			 String dataDirectory = request.getServletContext().getRealPath(DOWNLOAD_DIR);
-			 new File(dataDirectory).mkdir();
+                         new File(dataDirectory).mkdir();
 			 System.out.println("download: "+dataDirectory);
 			XlsUtils.write(getListObj(list), new XSSFWorkbook(filexls), "Tes Sheet", 2,dataDirectory,outputFileName);
 			downloadFile(request, response);
@@ -176,9 +177,11 @@ public class SampleController {
             response.flushBuffer();
           } catch (IOException ex) {
         	  ex.printStackTrace();
+//            log.info("Error writing file to output stream. Filename was '{}'", fileName, ex);
             throw new RuntimeException("IOError writing file to output stream");
           }
         
+//        return list(model);
 	}
 
 	private List<Object> getListObj(List<AhmsdnisMstbrnd> list) {
@@ -313,11 +316,11 @@ public class SampleController {
             for (Row row : sheet) {
                 data.put(i, new ArrayList<Object>());
                 for (Cell cell : row) {
-                    switch (cell.getCellTypeEnum()) {
-                        case STRING: 
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_STRING: 
                         	data.get(new Integer(i)).add(cell.getRichStringCellValue().getString()); 
                         	break;
-                        case NUMERIC: 
+                        case Cell.CELL_TYPE_NUMERIC: 
                         	if (DateUtil.isCellDateFormatted(cell)) {
                         		cell.setCellStyle(cellStyle);
                         		String datex = cell.getDateCellValue() + "";

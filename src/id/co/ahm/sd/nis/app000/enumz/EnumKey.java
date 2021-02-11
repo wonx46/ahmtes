@@ -2,7 +2,8 @@ package id.co.ahm.sd.nis.app000.enumz;
 
 public enum EnumKey implements IEnum {
 	
-	BRAND("brand");
+	BRAND("brand"),
+        POPULATION("population");
 	
 	
 	private String name;
@@ -18,7 +19,7 @@ public enum EnumKey implements IEnum {
 
 	public String[] getItems() {
 		// TODO Auto-generated method stub
-		return new String[] {  BRAND.getString() };
+		return new String[] {  BRAND.getString(),POPULATION.toString() };
 	}
 	
 }
